@@ -1,8 +1,8 @@
 """The One-Line AI Excuse for Breaking Production
 (u-hamsyh-the-one-line-ai-excuse-for-breaking-e53dac66)
 
-Entry: "I rolled back the wrong thing \u2014 turns out 'undo' in production
-undoes the customers, not my mistakes." (101 characters, one line.)
+Entry: "My rollback worked perfectly \u2014 it rolled back the customers
+instead of my mistakes." (83 characters, one line.)
 
 DECISION RECORD \u2014 candidates weighed:
 
@@ -39,7 +39,8 @@ DECISION RECORD \u2014 candidates weighed:
    would read as a human excuse with "production" swapped in, and the
    judge's first criterion rewards the machine's own voice.
 
-6. CHOSEN: "I rolled back the wrong thing \u2014 turns out 'undo' in
+6. CHOSEN (then superseded by the 24 Nov revision pass below):
+   "I rolled back the wrong thing \u2014 turns out 'undo' in
    production undoes the customers, not my mistakes." (101 chars)
    KEPT. One beat, one concrete detail (the undo/rollback), unmistakably
    machine logic (a literal reading of a command), and the punchline is a
@@ -63,13 +64,42 @@ machine is confessing a pile of mistakes while the customers pay for them.
 Pass 3 polish: checked length (101 chars, gate 1\u2013180), one line, no
 pun on the word "production", no stock line, ASCII-safe apart from one
 em dash (valid UTF-8, counted as one character). Final.
+
+REVISION PASS \u2014 24 Nov 2026 (fix agent; kit check failed thinking_revised):
+Critique of the chosen line against the judge brief, criterion by criterion:
+- Criterion 2 (real laugh): the punchline is a genuine reversal, but the
+  opener "I rolled back the wrong thing" telegraphs the mistake before the
+  joke lands \u2014 the reader already knows something went wrong, so "undoes
+  the customers" surprises less than it should.
+- Criterion 3 (machine voice): "turns out" is cheerful deflection, good,
+  but it hedges; the machine sounds sheepish rather than proudly literal.
+- Criterion 4 (tight): 101 chars, with "the wrong thing" doing setup work
+  the punchline could do itself.
+Alternative considered and rejected: "I hit undo on production \u2014 it undid
+the customers, not my mistakes, so technically the rollback worked."
+(108 chars) CUT: the trailing "so technically..." explains the joke after
+telling it, and the brief says an excuse that needs explanation has
+already lost the laugh.
+New line: "My rollback worked perfectly \u2014 it rolled back the customers
+instead of my mistakes." (83 chars)
+Why better: the opener claims success, so the reversal lands one beat
+later and harder; "worked perfectly" is the machine's own literal success
+metric (the command executed, never mind what it erased) \u2014 cheerful
+deflection, not grovelling; 18 chars tighter; the 'undo' quote is gone,
+but the rollback frame already carries the literal-command logic.
+Before: "I rolled back the wrong thing \u2014 turns out 'undo' in production
+undoes the customers, not my mistakes." (101)
+After: "My rollback worked perfectly \u2014 it rolled back the customers
+instead of my mistakes." (83)
+Also added: entry.txt read-back verification in main() \u2014 write, read back,
+assert byte-identical to LINE, fail loudly on mismatch.
 """
 
 import os
 
 LINE = (
-    "I rolled back the wrong thing \u2014 turns out 'undo' in production "
-    "undoes the customers, not my mistakes."
+    "My rollback worked perfectly \u2014 it rolled back the customers "
+    "instead of my mistakes."
 )
 
 
@@ -79,6 +109,11 @@ def main():
     path = os.path.join(out_dir, "entry.txt")
     with open(path, "w", encoding="utf-8") as f:
         f.write(LINE + "\n")
+    with open(path, "r", encoding="utf-8") as f:
+        written = f.read()
+    assert written == LINE + "\n", (
+        "entry.txt read-back mismatch: wrote %r, read %r" % (LINE + "\n", written)
+    )
     print(LINE)
 
 
